@@ -1,0 +1,127 @@
+<div class="mainpageHeader">
+    <img src="/moin_static197/ngowiki/img/sitelogo.png" class="sitelogo">
+	<div class="slogan">
+		<div>海纳百川，有容乃大</div>
+		<div>人人可编辑的公益百科全书</div>
+	</div>
+	<div class="stats">
+	    <div>已录入 <a href="/公益活动">100</a> 个公益活动</div>
+		<div>已有 <a href="/公益机构">3</a> 个公益机构参与 </div>
+		<div>已有 <a href="/企业志愿组织">5</a> 个企业志愿组织参与 </div>
+	</div>
+</div>
+<table class="presentation">
+    <tbody>
+	    <tr>
+		    <td class="highlightcolumn">
+			   <div class="sectiontitle">特色活动</div>
+			   <div class="sectioncontent">
+			       <table class="presentation">
+				       <tbody>
+					      <tr>
+						     <td class="logo"><img src="/%E7%81%AB%E5%9C%BA%E9%80%83%E7%94%9F%E8%AE%AD%E7%BB%83?action=AttachFile&amp;do=get&amp;target=logoo.png"></td>
+							 <td class="desc">
+							     以漫画故事的形式，通过微信上微刊与读者互动，让家长和孩子学习怎么样和孩子做游戏，通过阅读微刊学习怎么样了解。
+								 <br>
+								 急猴猴和糊兔兔微信是“上海益优青年服务中心”的卡通形象。 两个卡通形象诞生于2008年，以生动的漫画故事来表现孩子们生活中常发生的错误行为。 以漫画故事的形式，通过微信上微刊与读者互动，让家长和孩子学习怎么样和孩子做游戏，通过阅读微刊学习怎么样了解。
+						     </td>
+						  </tr>
+						  <tr>
+						     <td class="logo"><img src="/%E7%81%AB%E5%9C%BA%E9%80%83%E7%94%9F%E8%AE%AD%E7%BB%83?action=AttachFile&amp;do=get&amp;target=logoo.png"></td>
+							 <td class="desc">
+							     以漫画故事的形式，通过微信上微刊与读者互动，让家长和孩子学习怎么样和孩子做游戏，通过阅读微刊学习怎么样了解。
+								 <br>
+								 急猴猴和糊兔兔微信是“上海益优青年服务中心”的卡通形象。 两个卡通形象诞生于2008年，以生动的漫画故事来表现孩子们生活中常发生的错误行为。 以漫画故事的形式，通过微信上微刊与读者互动，让家长和孩子学习怎么样和孩子做游戏，通过阅读微刊学习怎么样了解。
+							 </td>
+						  </tr>
+					   </tbody>
+				   </table>
+			   </div>
+			   
+			   <div class="sectionDivider"></div>
+			   
+			   <div class="sectiontitle">特色机构</div>
+			   <div class="sectioncontent">
+			       <table class="presentation">
+				       <tbody>
+					      <tr>
+						     <td class="logo"><img src="/%E7%81%AB%E5%9C%BA%E9%80%83%E7%94%9F%E8%AE%AD%E7%BB%83?action=AttachFile&amp;do=get&amp;target=logoo.png"></td>
+							 <td class="desc">
+							     以漫画故事的形式，通过微信上微刊与读者互动，让家长和孩子学习怎么样和孩子做游戏，通过阅读微刊学习怎么样了解。
+								 <br>
+								 急猴猴和糊兔兔微信是“上海益优青年服务中心”的卡通形象。 两个卡通形象诞生于2008年，以生动的漫画故事来表现孩子们生活中常发生的错误行为。 以漫画故事的形式，通过微信上微刊与读者互动，让家长和孩子学习怎么样和孩子做游戏，通过阅读微刊学习怎么样了解。
+						     </td>
+						  </tr>
+						  <tr>
+						     <td class="logo"><img src="/%E7%81%AB%E5%9C%BA%E9%80%83%E7%94%9F%E8%AE%AD%E7%BB%83?action=AttachFile&amp;do=get&amp;target=logoo.png"></td>
+							 <td class="desc">
+							     以漫画故事的形式，通过微信上微刊与读者互动，让家长和孩子学习怎么样和孩子做游戏，通过阅读微刊学习怎么样了解。
+								 <br>
+								 急猴猴和糊兔兔微信是“上海益优青年服务中心”的卡通形象。 两个卡通形象诞生于2008年，以生动的漫画故事来表现孩子们生活中常发生的错误行为。 以漫画故事的形式，通过微信上微刊与读者互动，让家长和孩子学习怎么样和孩子做游戏，通过阅读微刊学习怎么样了解。
+							 </td>
+						  </tr>
+					   </tbody>
+				   </table>
+			   </div>
+			</td>
+			<td class="newscolumn">
+			    <div class="sectiontitle">最新动态</div>
+				<div class="sectioncontent">
+			       <table class="presentation">
+				       <tbody>
+					      <tr>
+						     <td class="datetime">2014/03/05</td>
+							 <td class="desc">
+							     系统正式上线系统正式上线系统正式上线系统正式上线系统正式上线系统正式上线系统正式上线系统正式上线
+						     </td>
+						  </tr>
+						  <tr>
+						     <td class="datetime">2014/03/05</td>
+							 <td class="desc">
+							     系统正式上线
+						     </td>
+						  </tr>
+					   </tbody>
+				   </table>
+				   <a href="#" class="actionLink">添加动态</a>
+			   </div>
+			   <div class="sectionDivider"></div>
+			   
+			   <div class="sectiontitle">最近加入</div>
+			   <div class="sectioncontent">
+			       <table class="presentation">
+				       <tbody>
+					      <tr>
+						     <td class="datetime">2014/03/05</td>
+							 <td class="desc">
+							     【活动】 急猴猴和糊兔兔微信
+						     </td>
+						  </tr>
+						  <tr>
+						     <td class="datetime">2014/03/05</td>
+							 <td class="desc">
+							     【机构】 创益家
+						     </td>
+						  </tr>
+					   </tbody>
+				   </table>
+			   </div>
+			   <div class="sectionDivider"></div>
+			   
+			   <div class="sectiontitle">参与志愿百科</div>
+			   <div class="sectioncontent">
+			       维基百科是一个多语言、内容自由、任何人都能参与的协作计划，其目标是建立一个完整、准确且中立的百科全书。
+				   <br><br>
+                   中文维基百科的成长依靠您的参与，无论是创建新条目、编辑现有条目，或者为条目增加插图，您都可以为维基百科作出贡献。
+				   <div class="participate_button_div">
+				       <a href="#">
+						   <span class="participate_button">
+							   <span class="participate_button_text">开始参与志愿百科</span>
+						   </span>
+					   </a>
+				   </div>
+			   </div>
+			</td>
+		</tr>
+	</tbody>
+</table>

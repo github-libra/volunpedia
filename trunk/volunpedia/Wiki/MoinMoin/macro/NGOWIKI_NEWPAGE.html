@@ -1,0 +1,138 @@
+<table style="border-width:0px;">
+   <tr>
+      <td style="border-width:0px">创建：</td>
+	  <td style="border-width:0px; width:25em;">
+	     <select id="type" name="type" style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%">
+            <option value="activity">志愿活动</option>
+            <option value="organization">公益机构</option>
+            <option value="enterprise">企业志愿组织</option>
+			<option value="volunteer">学生志愿组织</option>
+            <option value="site">志愿服务基地</option>
+			<option value="material">资料库</option>
+         </select>
+   </tr>
+   <tr>
+      <td id="nameLabel" style="border-width:0px">志愿活动名：</td>
+	  <td style="border-width:0px; width:25em;">
+	     <input type="text" id="name" name="name" style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%">
+	  </td>
+   </tr>
+   <tr id="organizationTR">
+      <td style="border-width:0px">所属公益机构：</td>
+	  <td style="border-width:0px; width:25em;">
+	     <input type="text" id="organization" name="organization" style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%">
+	  </td>
+   </tr>
+   <tr>
+      <td colspan="2" style="border-width:0px; width:25em; padding-top:10px;">
+	      网站使用条款：
+	  </td>
+   </tr>
+   <tr>
+      <td colspan="2" style="border-width:0px; width:25em;">
+	      <textarea  style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%; height: 15em;" readonly>{copyright}</textarea>
+	  </td>
+   </tr>
+   <tr>
+      <td colspan="2" style="border-width:0px; width:25em; ">
+	      <input type="checkbox" id="licenseCheckbox" style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; ">
+		  <label style="font-size: 90%; position: relative; top: -2px; ">我接受以上条款</label>
+	  </td>
+   </tr>
+   <tr>
+      <td colspan="2" style="border-width:0px; width:25em; padding-top:10px;">
+	      <input type="button" id="createpageBtn" name="submit" value="确定" disabled>
+	  </td>
+   </tr>
+</table>
+
+<script language="javascript">
+    window.disableDoubleClickEditing = true;
+	
+	function getQueryParameter(name) {
+	    var uri = window.location.search;
+        var re = new RegExp("" +name+ "=([^&?]*)", "ig");
+        return ((uri.match(re))?(uri.match(re)[0].substr(name.length+1)):null);
+	}
+	
+	$("#createpageBtn").click(function() {
+	    var url = "";
+		
+		var type = $("#type")[0].value;
+		if(type != 'organization') {
+		    var belong = $("#organization")[0].value;
+			belong = jQuery.trim(belong.replace(/\//g, ' '));
+			if(belong.length > 0) {
+			    url = url + '/' + encodeURIComponent(belong);
+			}
+		}
+		
+		var pagename = jQuery.trim($("#name")[0].value.replace(/\//g, ' '));
+		if(pagename.length == 0) {
+		    return;
+		}
+		
+		url = url + '/' + encodeURIComponent(pagename) + '?action=edit&editor=gui&template=';
+		if(type == 'activity') {
+		    url = url + '志愿活动模板';
+		} else if(type == 'organization') {
+		    url = url + '公益机构模板';
+		} else if(type == 'enterprise') {
+		    url = url + '企业志愿组织模板';
+		} else if(type == 'volunteer') {
+		    url = url + '学生志愿组织模板';
+		} else if(type == 'site') {
+		    url = url + '志愿服务基地模板';
+		} else if(type == 'material') {
+		    url = url + '资料模板';
+		}
+		
+		window.location.href = url;
+	});
+	
+    $("#licenseCheckbox").change(function(){
+        if($("#licenseCheckbox")[0].checked) {
+		   $("#createpageBtn")[0].removeAttribute('disabled');
+		} else {
+		   $("#createpageBtn").attr('disabled', 'true');
+		}
+    });
+	
+	var organization = getQueryParameter('organization');
+	if(!!organization) {
+	    $("#organization")[0].value = decodeURIComponent(organization);
+	}
+	
+	var pagetype = getQueryParameter('pagetype');
+	if(!!pagetype) {
+	    $("#type")[0].value = pagetype;
+		onNewPageTypeChanged();
+	}
+	
+	function onNewPageTypeChanged() {
+	    $("#organizationTR")[0].style.display = '';
+		
+	    var t = $("#type")[0].value;
+		if(t == 'activity') {
+		    $("#nameLabel")[0].innerHTML = '志愿活动名：';
+		} else if(t == 'organization') {
+		    $("#nameLabel")[0].innerHTML = '公益机构名：';
+			$("#organizationTR")[0].style.display = 'none';
+		} else if(t == 'enterprise') {
+		    $("#nameLabel")[0].innerHTML = '企业志愿组织名：';
+		} else if(t == 'volunteer') {
+		    $("#nameLabel")[0].innerHTML = '学生志愿组织名：';
+		} else if(t == 'site') {
+		    $("#nameLabel")[0].innerHTML = '志愿服务基地名：';
+		} else if(t == 'material') {
+		    $("#nameLabel")[0].innerHTML = '资料名：';
+			$("#organizationTR")[0].style.display = 'none';
+		}
+	}
+	
+	onNewPageTypeChanged();
+	
+	$("#type").change(function(){
+        onNewPageTypeChanged();
+    });
+</script>

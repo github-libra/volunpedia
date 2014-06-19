@@ -1,0 +1,8 @@
+#format wiki 
+= 公益活动列表 =
+ 
+<<ListPagesByTag(filterByTags=活动类)>>
+
+<<ActionLinksDivider>>
+
+<<NewPageLink(text=创建活动,type=activity,style=)>>

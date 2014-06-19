@@ -1,0 +1,70 @@
+timestamp: 1393737988.0
+
+_extend=_buf.extend;_to_str=to_str;_escape=escape; _extend(('''<div class="joinUsPageHeader">
+欢迎
+</div>
+<p class="joinUsPageText">
+困惑？
+</p>
+<p class="joinUsPageText">
+有一颗热忱于志愿的心，但所参加的活动无趣，苦于没有好的活动形式，或是寻找不到合适的服务基地、团队。
+</p>
+<p class="joinUsPageText">
+遗憾？
+</p>
+<p class="joinUsPageText">
+做了一次非常棒的活动，但结束后，这份策划只能被埋藏于硬盘中再无人知晓。
+</p>
+<p class="joinUsPageText">
+纠结？
+</p>
+<p class="joinUsPageText">
+在完成志愿活动后发现问题，却不再有时间精力去改进、完善。
+</p>
+<p class="joinUsPageText">
+让志愿百科帮助你！
+</p>
+<p class="joinUsPageText">
+通过关键字搜索、标签筛选，她能给你提供新颖、有趣的活动形式；能让你在这儿和大家分享你的志愿经历、想法；能让更多的朋友和你一起不断改进、完善现有活动。
+</p>
+<p class="joinUsPageText">
+你新建的一个词条会为其他热心公益的朋友打开一片新的天地；你分享的一次志愿活动会激发更多的公益行为；你上传的一个活动想法会启发更多的公益热情。
+</p>
+<p class="joinUsPageText">
+而撰写或修改志愿百科的人，都是你我这样普通却热心公益的人。正是因为有我们这样普通的志愿者们点滴的努力，才能使越来越多的人感受志愿活动的美好与温暖。
+</p>
+<p class="joinUsPageText">
+所以我们在此诚挚地邀请你将你所知贡献出来，通过志愿百科与更多的人分享，一起传递公益理念，一起做一次想做就能做的志愿活动。
+</p>
+
+<div class="joinUsPageHeader">
+注册账号
+</div>
+<p class="joinUsPageText">
+志愿百科允许所有人编辑页面。您可以快捷、免费、方便的成为志愿百科的注册用户。
+</p>
+
+<div class="joinUsPageHeader">
+邀请您撰写志愿百科
+</div>
+<p class="joinUsPageText">
+准备好开始了吗？可以根据您的情况从下方选择：
+</p>
+<p class="joinUsPageText highlight">
+您的第一次编辑
+</p>
+<p class="joinUsPageText">
+十分容易——来试一试吧!
+</p>
+<p class="joinUsPageText attachitems">
+<a href="/join_us?action=AttachFile&do=get&target=%E6%96%B0%E6%89%8B%E5%85%A5%E9%97%A8.doc">新手入门（附件）</a>
+<a href="/join_us?action=AttachFile&do=get&target=%E6%9D%A1%E7%9B%AE%E8%8C%83%E4%BE%8B.doc">条目范例（附件）</a>
+<a href="/how_to_create_new_page">如何创建新条目</a>
+</p>
+
+<div class="joinUsPageHeader">
+求助
+</div>
+<p class="joinUsPageText">
+如果您对我们的网站有任何的意见或者建议，亦或者有不明白的地方，请发至我们的邮箱：<a href="mailto:XXXX@volunpedia.com">XXXX@volunpedia.com</a> 我们会尽快为您解答！
+</p>''', ));

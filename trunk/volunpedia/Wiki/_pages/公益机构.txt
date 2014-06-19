@@ -1,0 +1,7 @@
+= 公益机构 =
+
+<<ListPagesByTag(filterByTags=公益机构类)>>
+
+<<ActionLinksDivider>>
+
+<<NewPageLink(text=创建机构,type=organization,style=)>>

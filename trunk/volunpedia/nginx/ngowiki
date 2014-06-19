@@ -1,0 +1,13 @@
+server {
+    server_name 115.29.235.4;
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:///srv/www/moin/moin.sock;
+        uwsgi_modifier1 30;
+    }
+	location /moin_static197_20140329 {
+        alias /srv/www/moin/pythonenv/lib/python2.7/site-packages/MoinMoin/web/static/htdocs;
+    }
+}

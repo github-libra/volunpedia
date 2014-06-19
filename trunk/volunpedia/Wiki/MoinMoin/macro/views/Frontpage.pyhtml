@@ -1,0 +1,124 @@
+<div class="frontpage_content">
+<div class="mainpageHeader">
+	<div class="slogan">
+		<img src="${slogan_url}">
+	</div>
+	<div class="stats">
+	    <div>已录入 <a href="/公益活动">${totalcount_activities}</a> 个志愿活动</div>
+		<div>已有 <a href="/公益机构">${totalcount_ngos}</a> 个公益机构参与 </div>
+		<div>已有 <a href="/企业志愿组织">${totalcount_enterprises}</a> 个企业志愿组织参与 </div>
+	</div>
+</div>
+<table class="presentation">
+    <tbody>
+	    <tr>
+		    <td class="highlightcolumn">
+			   <div class="highlightbox">
+				   <div class="sectiontitle">趣活动</div>
+				   <div class="sectioncontent">
+					   <table class="presentation">
+						   <tbody>
+							  <?py for item in featured_activities: ?>
+							  <tr>
+								 <td class="logo"><img src="${item['logo_link']}"></td>
+								 <td class="desc">
+									 <p><a href="${item['link']}">${item['title']}</a></p>
+									 ${item['summary']}
+									 <br>
+									 ${item['superrecommend']}
+								 </td>
+							  </tr>
+							  <?py #endfor ?>
+						   </tbody>
+					   </table>
+				   </div>
+				   
+				   <div class="sectionDivider"></div>
+				   
+				   <div class="sectiontitle">趣机构</div>
+				   <div class="sectioncontent">
+					   <table class="presentation">
+						   <tbody>
+							  <?py for item in featured_ngos: ?>
+							  <tr>
+								 <td class="logo"><img src="${item['logo_link']}"></td>
+								 <td class="desc">
+									 <p><a href="${item['link']}">${item['title']}</a></p>
+									 ${item['summary']}
+									 <br>
+									 ${item['superrecommend']}
+								 </td>
+							  </tr>
+							  <?py #endfor ?>
+						   </tbody>
+					   </table>
+				   </div>
+				</div>
+			</td>
+			<td class="newscolumn">
+				<div class="newsbox">
+					<?py if len(news_items) > 0: ?>
+					<div class="sectiontitle">趣闻</div>
+					<div class="sectioncontent">
+					   <table class="presentation">
+						   <tbody>
+					<?py     for item in news_items: ?>
+							  <tr>
+								 <td class="datetime">${item['superrecommend']}</td>
+								 <td class="desc">
+									 <a href="${item['link']}">${item['title']}</a>
+								 </td>
+							  </tr>
+					<?py     #endfor ?>
+						   </tbody>
+					   </table>
+					</div>
+					<div class="sectionDivider"></div>
+					<?py #endif ?>
+				   
+					<?py if len(recently_added) > 0: ?>
+					<div class="sectiontitle">最近加入</div>
+					<div class="sectioncontent">
+						<table class="presentation">
+							<tbody>
+					<?py     for item in recently_added: ?>
+							  <tr>
+								 <td class="datetime"><script language="javascript">document.write(new Date(${item['datecreated']} / 1000).format('yyyy/MM/dd'));</script></td>
+								 <td class="desc">
+					<?py         if item['recently_added_type'] == 'activity': ?>
+									 <a href="${item['link']}">【活动】 ${item['title']}</a>
+					<?py         #endif ?>
+					<?py         if item['recently_added_type'] == 'ngo': ?>
+									 <a href="${item['link']}">【机构】 ${item['title']}</a>
+					<?py         #endif ?>
+					<?py         if item['recently_added_type'] == 'enterprise': ?>
+									 <a href="${item['link']}">【企业】 ${item['title']}</a>
+					<?py         #endif ?>
+								 </td>
+							  </tr>
+					<?py     #endfor ?>
+						   </tbody>
+					   </table>
+				   </div>
+				   <div class="sectionDivider"></div>
+				   <?py #endif ?>
+				   
+				   <div class="sectiontitle">欢迎参与志愿百科</div>
+				   <div class="sectioncontent">
+					   志愿百科是一个内容开放的在线的志愿活动分享平台，它是由个人和团体自发组成的，是一个发展中的志愿活动分享的资源平台；并允许任何人通过因特网联接在这里创建和修改活动内容。
+					   <br><br>
+					   志愿百科的成长需要你的参与，你能通过志愿百科与更多的人分享、传递公益理念，与其他热心公益活动的朋友们一起做一次想做就能做的志愿活动。
+					   <div class="participate_button_div">
+						   <a href="/join_us">
+							   <span class="participate_button">
+								   <span class="participate_button_text">开始参与志愿百科</span>
+							   </span>
+						   </a>
+					   </div>
+				   </div>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
