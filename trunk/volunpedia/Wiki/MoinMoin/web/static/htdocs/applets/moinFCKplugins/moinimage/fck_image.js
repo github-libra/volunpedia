@@ -92,6 +92,9 @@ function LoadSelection()
    if(sClass.indexOf('floatRight') >= 0) {
        GetE('image_align').value = 'floatRight';
    }
+   if(sClass.indexOf('center') >= 0) {
+       GetE('image_align').value = 'center';
+   }
 }
 
 function OnProtocolChange()
@@ -195,6 +198,8 @@ function Ok()
       oImage.className = GetE('image_align').value;
       oImage.setAttribute('class', GetE('image_align').value);
   }
+  
+  setTimeout(function(){adjust_img_paddings();}, 1);
 
   return true;
 }

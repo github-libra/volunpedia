@@ -1,4 +1,34 @@
+function adjust_img_paddings() {
+   if(typeof FCKeditor == 'undefined') {
+		var container = $('#content');
+		var containerWidth = container.width();
+		var align_center_images = $('.center');
+		for(var i = 0; i < align_center_images.length; i++) {
+			var img = align_center_images[i];
+			var imgWidth = $(img).width();
+			img.style.paddingLeft = ((containerWidth - imgWidth)/2) + 'px';
+		}
+	} else {
+	    try {
+			var container = $(window.frames[0].document.body);
+			var containerWidth = container.width();
+			var align_center_images = $('.center', window.frames[0].frames[0].document);
+			for(var i = 0; i < align_center_images.length; i++) {
+				var img = align_center_images[i];
+				var imgWidth = $(img).width();
+				img.style.paddingLeft = ((containerWidth - imgWidth)/2 - 40) + 'px';
+			}
+		} catch(err) {}
+		setTimeout(function(){adjust_img_paddings();}, 100);
+	}
+}
+
 $( window ).ready(function() {
+    $( window ).resize ( function() {
+		adjust_img_paddings();
+	});
+	adjust_img_paddings();
+
     var table_of_contents = $('.table-of-contents');
 	for(var i = 0; i < table_of_contents.length; i++) {
 	    var table_of_contents_heading = $('.table-of-contents-heading', table_of_contents[i])[0].innerHTML;

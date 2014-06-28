@@ -603,6 +603,7 @@ def image_dialog(request):
         <option value="none" selected="selected">无</option>
         <option value="floatLeft">左侧漂浮</option>
 		<option value="floatRight">右侧漂浮</option>
+		<option value="center">居中</option>
        </select>
       </td>
      </tr>
