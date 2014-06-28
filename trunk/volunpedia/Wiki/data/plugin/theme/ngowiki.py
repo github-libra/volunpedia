@@ -108,7 +108,7 @@ class Theme(rightsidebar.Theme):
         item = u'<li class="%s">%s</li>'
         current = d['page_name']
 
-        pagenames = [u'志愿活动', u'志愿组织', u'公益机构', u'企业志愿组织', u'学生志愿组织', u'志愿服务基地', u'资料库']
+        pagenames = [u'志愿活动', u'志愿组织', u'公益机构', u'企业志愿组织', u'学生志愿组织', u'志愿服务基地', u'志愿设计', u'资料库']
         for pagename in pagenames:
             # Split text without localization, user knows what he wants
             if pagename != u'志愿组织':
