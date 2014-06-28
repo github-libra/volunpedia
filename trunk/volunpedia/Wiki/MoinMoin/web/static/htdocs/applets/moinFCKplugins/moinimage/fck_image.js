@@ -199,7 +199,7 @@ function Ok()
       oImage.setAttribute('class', GetE('image_align').value);
   }
   
-  setTimeout(function(){adjust_img_paddings();}, 1);
+  window.parent.parent.__images_dirty = true;
 
   return true;
 }
