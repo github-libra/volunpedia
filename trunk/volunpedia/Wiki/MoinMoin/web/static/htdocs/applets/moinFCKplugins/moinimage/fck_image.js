@@ -73,7 +73,7 @@ function LoadSelection()
     sUrl = sUrl.replace(UriProtocol, '');
   }
 
-  GetE('txtUrl').value = decodeUrl(sUrl);
+  GetE('txtUrl').value = decodeURIComponent(sUrl);
 
   if (oLink) 
     GetE('chkLink').checked = 1;
