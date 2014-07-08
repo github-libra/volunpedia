@@ -1,0 +1,1 @@
+alter table PAGES add column IDEA_STATUS integer default 0

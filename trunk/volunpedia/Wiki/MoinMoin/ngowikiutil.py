@@ -68,6 +68,16 @@ class NgoWikiUtil:
                 except:
                     pass
 
+    def fixup_database_001(self):
+        fixupdb_sql_file = os.path.join(self.request.cfg.data_dir, "database", "fixup001.sql")
+        with open(fixupdb_sql_file, 'r') as f:
+            for line in f:
+                try:
+                    self.db.execute(line)
+                    self.db.commit()
+                except:
+                    pass
+
     def insert_tag(self, tag, type):
         uid = str(uuid.uuid1())
         self.db.execute('''
@@ -117,6 +127,19 @@ class NgoWikiUtil:
             UPDATE PAGES SET PATH = ?, TITLE = ?, LOGO = ?, SUMMARY = ?, LASTMODIFIED = ? WHERE ID = ?
             ''', (path, pageinfo['title'], pageinfo['logo'], pageinfo['summary'], pageinfo['lastmodified'], uid))
         return self.select_page_by_id(uid)
+
+    def update_idea_status(self, uid, status):
+        self.db.execute('''
+            UPDATE PAGES SET IDEA_STATUS = ? WHERE ID = ?
+            ''', (status, uid))
+
+    def select_idea_status(self, uid):
+        cursor = self.db.cursor()
+        cursor.execute('''
+            SELECT IDEA_STATUS FROM PAGES WHERE ID = ?
+            ''', (uid,))
+        for row in cursor:
+            return row[0]
 
     def select_page_by_path(self, path):
         cursor = self.db.cursor()

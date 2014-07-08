@@ -57,6 +57,7 @@ def execute(pagename, request):
     category = request.form.get('category')
     rstrip = int(request.form.get('rstrip', '0'))
     trivial = int(request.form.get('trivial', '0'))
+    ideastatus = int(request.form.get('ideastatus', '0'))
 
     if 'button_switch' in request.form:
         if editor == 'text':
@@ -200,6 +201,7 @@ def execute(pagename, request):
                 ngowikiutil.update_page(page_uuid, pg)
             pageinfo["id"] = page_uuid
             ngowikiutil.update_page_meta(pageinfo)
+            ngowikiutil.update_idea_status(page_uuid, ideastatus)
         finally:
             ngowikiutil.close_database(True)
 
