@@ -420,6 +420,7 @@ class SearchResults(object):
 
         # Add pages formatted as definition list
         hitsTo = hitsFrom + request.cfg.search_results_per_page + 1
+        hitDiff = 0
         if self.hits:
             write(f.definition_list(1))
 
@@ -428,8 +429,10 @@ class SearchResults(object):
             for hit in self.hits:
                 result = ngowikiutil.select_page_by_path(hit.page_name)
                 if result == None:
+                    hitDiff = hitDiff + 1
                     continue
                 if len(ngowikiutil.select_page_tags_by_id(result["id"])) == 0:
+                    hitDiff = hitDiff + 1
                     continue
                 hitIdx = hitIdx + 1
                 if paging:
@@ -497,7 +500,7 @@ class SearchResults(object):
             if paging:
                 write(self.formatPageLinks(hitsFrom=hitsFrom,
                     hitsPerPage=request.cfg.search_results_per_page,
-                    hitsNum=len(self.hits)))
+                    hitsNum=len(self.hits) - hitDiff))
 
         return self.getvalue()
 
