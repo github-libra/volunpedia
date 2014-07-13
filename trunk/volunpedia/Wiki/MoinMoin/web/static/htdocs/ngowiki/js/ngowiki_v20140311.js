@@ -1,3 +1,29 @@
+function guid() {
+    function S4() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
+function getCookie( name ) { 
+	var start = document.cookie.indexOf( name + "=" ); 
+	var len = start + name.length + 1; 
+	if ( ( !start ) && ( name != document.cookie.substring( 0, name.length ) ) ) { 
+		return null; 
+	} 
+	if ( start == -1 ) return null; 
+	var end = document.cookie.indexOf( ';', len ); 
+	if ( end == -1 ) end = document.cookie.length; 
+	return unescape( document.cookie.substring( len, end ) ); 
+} 
+function setCookie(name, value) { 
+	document.cookie = name + '=' + escape( value ); 
+} 
+
+if(!getCookie('browser_user_id')) {
+    setCookie('browser_user_id', guid())
+}
+
 function adjust_img_paddings() {
    if(typeof FCKeditor == 'undefined') {
 		var container = $('#content');
@@ -223,13 +249,13 @@ function render_pagingbar(total, pagesize) {
 }
 
 function recommend() {
-    $.ajax({url: get_request_url() + '?action=discussion&do=like&from=0&length=3', dataType: 'json', success: function(data){
+    $.ajax({url: get_request_url() + '?action=discussion&do=like&from=0&length=3&sessionId=' + getCookie('browser_user_id'), dataType: 'json', success: function(data){
 	    render_discussionpanel($('#page_discussion_panel')[0], data);
 	}});
 }
 
 function unrecommend() {
-    $.ajax({url: get_request_url() + '?action=discussion&do=unlike&from=0&length=3', dataType: 'json', success: function(data){
+    $.ajax({url: get_request_url() + '?action=discussion&do=unlike&from=0&length=3&sessionId=' + getCookie('browser_user_id'), dataType: 'json', success: function(data){
 	    render_discussionpanel($('#page_discussion_panel')[0], data);
 	}});
 }
@@ -308,7 +334,7 @@ function render_discussionpanel(div, data, offset, length) {
         document.write('<div id="page_discussion_panel"></div>');
     } else {
 	    if(!data) {
-			$.ajax({url: get_request_url() + '?action=discussion&from=' + offset + '&length=' + length, dataType: 'json', success: function(data){
+			$.ajax({url: get_request_url() + '?action=discussion&from=' + offset + '&length=' + length + '&sessionId=' + getCookie('browser_user_id'), dataType: 'json', success: function(data){
 				render_discussionpanel(div, data, offset, length);
 			}});
 		} else {
@@ -343,16 +369,19 @@ function render_discussionpanel(div, data, offset, length) {
 			}
 			
 			t = t + '<div style="min-height:30px">';
-			if($('#logout').length == 1 || offset > 0 || length < data.commentcount) {
+			if($('#logout').length == 1 || offset > 0 || length < data.commentcount || !!getCookie('browser_user_id')) {
 			    t = t + '<table style="width:100%;padding:0px;margin:0px;"><tbody><tr>';
-				if($('#logout').length == 1) {
+				if($('#logout').length == 1 || !!getCookie('browser_user_id')) {
 					t = t + '<td style="padding:0px;margin:0px"><div style="padding-top: 20px;">';
-					t = t + (!data.hasUserLikedPage ? '<a href="javascript:recommend()">我也喜欢</a>' : '<a href="javascript:unrecommend()">取消喜欢</a>') + '<span style="padding-left:5px;">&nbsp;</span>' + '<a href="javascript:comment()">我要评论</a>';
-					if(!document.getElementById('page_edit_disabled')) {
-					    t = t + '<span style="padding-left:5px;"><a href="' + create_request_url(get_request_url(), [], {'action': 'edit', 'editor': "gui"}) + '">我要改良</a></span>';
-					}
-					if(data.isSuperUser) {
-					    t = t + '<span style="padding-left:5px;">&nbsp;</span>' + '<a href="javascript:superrecommend()">特别推荐</a>';
+					t = t + (!data.hasUserLikedPage ? '<a href="javascript:recommend()">我也喜欢</a>' : '<a href="javascript:unrecommend()">取消喜欢</a>');
+					if($('#logout').length == 1) {
+						t = t + '<span style="padding-left:5px;">&nbsp;</span>' + '<a href="javascript:comment()">我要评论</a>';
+						if(!document.getElementById('page_edit_disabled')) {
+							t = t + '<span style="padding-left:5px;"><a href="' + create_request_url(get_request_url(), [], {'action': 'edit', 'editor': "gui"}) + '">我要改良</a></span>';
+						}
+						if(data.isSuperUser) {
+							t = t + '<span style="padding-left:5px;">&nbsp;</span>' + '<a href="javascript:superrecommend()">特别推荐</a>';
+						}
 					}
 					t = t + '</div></td>';
 				}

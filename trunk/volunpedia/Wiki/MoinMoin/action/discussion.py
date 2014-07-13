@@ -21,17 +21,19 @@ class DiscussionBoard:
     def release(self):
         self.ngowikiutil.close_database(True)
 
-    def like(self):
-        if self.user == None or not self.user.valid:
-            return
-        if not self.ngowikiutil.has_user_liked_page(self.user.id, self.page):
-            self.ngowikiutil.insert_like(self.page, self.user.id, '')
+    def like(self, sessionId):
+        userId = 'anonymous-' + sessionId
+        if self.user != None and self.user.valid:
+            userId = self.user.id
+        if not self.ngowikiutil.has_user_liked_page(userId, self.page):
+            self.ngowikiutil.insert_like(self.page, userId, '')
             self.ngowikiutil.commit_database()
 
-    def unlike(self):
-        if self.user == None or not self.user.valid:
-            return
-        like_info = self.ngowikiutil.select_like_by_page_and_userid(self.pageid, self.user.id)
+    def unlike(self, sessionId):
+        userId = 'anonymous-' + sessionId
+        if self.user != None and self.user.valid:
+            userId = self.user.id
+        like_info = self.ngowikiutil.select_like_by_page_and_userid(self.pageid, userId)
         if like_info != None:
             self.ngowikiutil.remove_likes_by_id(like_info["id"])
             self.ngowikiutil.commit_database()
@@ -61,7 +63,7 @@ class DiscussionBoard:
         self.ngowikiutil.remove_comments_by_id(commentid)
         self.ngowikiutil.commit_database()
 
-    def view(self, offset, length):
+    def view(self, offset, length, sessionId):
         page_info = self.ngowikiutil.select_page_by_id(self.pageid)
         comment_list = self.ngowikiutil.select_comments_by_page(self.page, offset, length)
         if comment_list == None:
@@ -79,6 +81,8 @@ class DiscussionBoard:
         has_user_liked_page = False
         if self.user != None and self.user.valid:
             has_user_liked_page = self.ngowikiutil.has_user_liked_page(self.user.id, self.page)
+        else: 
+            has_user_liked_page = self.ngowikiutil.has_user_liked_page('anonymous-' + sessionId, self.page)
         return {"commentcount": page_info["commentcount"], "likecount": page_info["likecount"], "hasUserLikedPage": has_user_liked_page, "comments": {"offset": offset, "length": length, "items": comment_list}, "isSuperUser": isSuperUser, "superrecommend": page_info["superrecommend"]}
 
 def execute(pagename, request):
@@ -87,15 +91,15 @@ def execute(pagename, request):
         form = request.values
         if form.get('do') != None:
             if form.get('do') == 'like':
-                discussion_board.like()
+                discussion_board.like(form['sessionId'])
             elif form.get('do') == 'unlike':
-                discussion_board.unlike()
+                discussion_board.unlike(form['sessionId'])
             elif form.get('do') == 'comment':
                 discussion_board.comment(form.get('content'))
             elif form.get('do') == 'removecomment':
                 discussion_board.removecomment(form.get('commentid'))
             elif form.get('do') == 'superrecommend':
                 discussion_board.superrecommend(form.get('content'))
-        request.write(json.dumps(discussion_board.view(int(form['from']), int(form['length']))))
+        request.write(json.dumps(discussion_board.view(int(form['from']), int(form['length']), form['sessionId'])))
     finally:
         discussion_board.release()
