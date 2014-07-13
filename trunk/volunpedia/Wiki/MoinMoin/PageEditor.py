@@ -465,12 +465,21 @@ If you don't want that, hit '''%(cancel_button_text)s''' to cancel your changes.
         idea_status_list.insert(0, ('0', u'已实现'))
         idea_status_list.insert(1, ('1', u'筹备中'))
         idea_status_list.insert(2, ('2', u'还只是想法'))
-        request.write("<p>")
-        request.write(u'状态：%(idea_status_list)s' % {
-            'idea_status_list': unicode(web.makeSelection('ideastatus', idea_status_list, str(ideastatus))),
-        })
-        request.write("</p>")
 
+        isActivityPage = False
+        lines = raw_body.split('\n')
+        for line in lines:
+            if line.startswith(u'## 关键字:') and u'志愿活动类' in line:
+                isActivityPage = True
+
+        if isActivityPage:
+            request.write("<p>")
+            request.write(u'状态：%(idea_status_list)s' % {
+                'idea_status_list': unicode(web.makeSelection('ideastatus', idea_status_list, str(ideastatus))),
+            })
+            request.write("</p>")
+
+        request.write("<div style='display:none'>");
         request.write("<p>")
         request.write(_("Comment:"),
             ' <input id="editor-comment" type="text" name="comment" value="%s" size="80" maxlength="200"'
@@ -510,6 +519,7 @@ If you don't want that, hit '''%(cancel_button_text)s''' to cancel your changes.
             'label': _('Remove trailing whitespace from each line')
             })
         request.write("</p>")
+        request.write("</div>");
 
         badwords_re = None
         if preview is not None:

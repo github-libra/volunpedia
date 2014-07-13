@@ -70,7 +70,8 @@ $( window ).ready(function() {
 			node.style.left = "-20px";
 			node.style.top = "-30px";
 			node.style.color = "gray";
-			node.innerHTML = '关键字:' + '<span style="padding-right:5px;">&nbsp;</span>' + [].concat(window.__page_meta.tags).concat(window.__page_meta.locations).join(", ")
+			var ideaStatusLabel = ['已实现', '筹备中', '新创意'];
+			node.innerHTML = '关键字:' + '<span style="padding-right:5px;">&nbsp;</span>' + [].concat(window.__page_meta.tags).concat(window.__page_meta.locations).join(", ") + (window.__page_meta.status !== "" ? '&nbsp; | &nbsp; 状态:<span style="padding-right:5px;">&nbsp;</span>' + ideaStatusLabel[window.__page_meta.status] : '');
 			if(h1.parentNode.lastChild == h1) {
 			    h1.parentNode.appendChild(node);
 			} else {
