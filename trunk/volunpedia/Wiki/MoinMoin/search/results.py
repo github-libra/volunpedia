@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 """
     MoinMoin - search results processing
 
@@ -14,6 +14,10 @@ import StringIO, time
 
 from MoinMoin import wikiutil
 from MoinMoin.Page import Page
+from MoinMoin.ngowikiutil import NgoWikiUtil
+from MoinMoin.action.AttachFile import exists
+from MoinMoin.action.AttachFile import getAttachUrl
+import re, json 
 
 ############################################################################
 ### Results
@@ -403,6 +407,9 @@ class SearchResults(object):
         @rtype: unicode
         @return formatted page list with context
         """
+        ngowikiutil = NgoWikiUtil(request)
+        ngowikiutil.open_database()
+
         self._reset(request, formatter)
         f = formatter
         write = self.buffer.write
@@ -412,53 +419,80 @@ class SearchResults(object):
             paging = False
 
         # Add pages formatted as definition list
+        hitsTo = hitsFrom + request.cfg.search_results_per_page + 1
         if self.hits:
             write(f.definition_list(1))
 
-            if paging:
-                hitsTo = hitsFrom + request.cfg.search_results_per_page
-                displayHits = self.hits[hitsFrom:hitsTo]
-            else:
-                displayHits = self.hits
-
-            for page in displayHits:
-                # TODO handle interwiki search hits
-                matchInfo = ''
-                if info:
-                    matchInfo = self.formatInfo(f, page)
-                if page.attachment:
-                    fmt_context = ""
-                    querydict = {
-                        'action': 'AttachFile',
-                        'do': 'view',
-                        'target': page.attachment,
-                    }
-                elif page.page_name.startswith('FS/'): # XXX FS hardcoded
-                    fmt_context = ""
-                    querydict = None
+            displayHits = []
+            hitIdx = 0
+            for hit in self.hits:
+                result = ngowikiutil.select_page_by_path(hit.page_name)
+                if result == None:
+                    continue
+                if len(ngowikiutil.select_page_tags_by_id(result["id"])) == 0:
+                    continue
+                hitIdx = hitIdx + 1
+                if paging:
+                    if hitsTo <= hitIdx - 1:
+                        break
+                    if hitsFrom <= hitIdx - 1:
+                        displayHits.append(hit)
                 else:
-                    fmt_context = self.formatContext(page, context, maxlines)
-                    if page.rev and page.rev != page.page.getRevList()[0]:
-                        querydict = {
-                            'rev': page.rev,
-                        }
-                    else:
-                        querydict = None
-                querystr = self.querystring(querydict,
-                    do_highlight=highlight_pages)
-                item = [
-                    f.definition_term(1),
-                    f.pagelink(1, page.page_name, querystr=querystr),
-                    self.formatTitle(page, highlight_titles=highlight_titles),
-                    f.pagelink(0, page.page_name),
-                    matchInfo,
-                    f.definition_term(0),
-                    f.definition_desc(1),
-                    fmt_context,
-                    f.definition_desc(0),
-                    self.formatHitInfoBar(page),
-                    ]
-                write(''.join(item))
+                    displayHits.append(hit)
+            if len(displayHits) <= request.cfg.search_results_per_page and hitsFrom == 0:
+                paging = False
+            if len(displayHits) > request.cfg.search_results_per_page:
+                displayHits = displayHits[0:request.cfg.search_results_per_page]
+
+            if len(displayHits) == 0:
+                write(u'没有找到相关内容，请调整搜索条件重新搜索')
+
+            template = '''
+                <table class="listitem_with_logosummary">
+                    <tr>
+                        <!--
+                        <td class="logo">
+                            %(logo)s
+                        </td>
+                        -->
+                        <td>
+                           <div class="title">
+                              <a href="%(link)s">%(title)s</a>
+                           </div>
+                           <div class="meta">
+                               <span>%(lastmodified)s</span>
+                               <span>%(tags)s</span>
+                               <span><span class="metaitem">%(likecount)s<span></span>
+                               <span><span class="metaitem">%(commentcount)s<span></span>
+                               <span><span class="metaitem">%(hitcount)s<span></span>
+                           </div>
+                           <div class="summary">%(summary)s</div>
+                        </td>
+                     </tr>
+                 </table>
+                '''
+            for page in displayHits:
+                result = ngowikiutil.select_page_by_path(page.page_name)
+                if result != None:
+                    if len(ngowikiutil.select_page_tags_by_id(result["id"])) > 0:
+                        page = Page(request, result["path"]) 
+                        logo = '<div class="logo defaultLogo">&nbsp;</div>'
+                        if len(result["logo"]) > 0 and exists(request, result["path"], result["logo"]):
+                            logo = '<img class="logo" src="' + getAttachUrl(result["path"], result["logo"], request) + '">'
+                        link = page.url(request)
+                        title = result["title"]
+                        lastmodified = page.mtime_printable(request)
+                        summary = result["summary"]
+
+                        tags = (", ".join(
+                                  map(lambda x: '<a href=\'javascript:add_filter_by_tag(' + json.dumps(x["tag"]) + ')\' >' + x["tag"] + '</a>', 
+                                      filter(lambda x: x["type"] == 1, ngowikiutil.select_page_tags_by_id(result["id"]))
+                                  )))
+
+                        if len(tags) > 0:
+                            tags = '<span class="metaitem">' + tags + '</span>'
+
+                        write(template % {"logo":logo, "title": title, "link": link, "lastmodified": lastmodified, "tags": tags, "summary": summary, "likecount": u'\u559c\u6b22\uff1a' + str(result["likecount"]), "commentcount": u'\u8bc4\u8bba\u6570\uff1a' + str(result["commentcount"]), "hitcount": u'\u8bbf\u95ee\u91cf\uff1a' + str(result["hitcount"])})
             write(f.definition_list(0))
             if paging:
                 write(self.formatPageLinks(hitsFrom=hitsFrom,
