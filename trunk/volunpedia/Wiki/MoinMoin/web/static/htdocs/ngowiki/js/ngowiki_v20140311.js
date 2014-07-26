@@ -53,6 +53,18 @@ $( window ).ready(function() {
 		adjust_img_paddings();
 	});
 	adjust_img_paddings();
+	
+	if(typeof FCKeditor == 'undefined') {
+		var attachment_images = $('.attachment');
+		for(var i = 0; i < attachment_images.length; i++) {
+			var img = attachment_images[i];
+			var link = document.createElement('a');
+			link.href = get_request_url() + '?action=viewImage&name=' + encodeURIComponent(img.getAttribute('title'));
+			link.setAttribute('target', '_blank');
+			img.parentNode.replaceChild(link, img);
+			link.appendChild(img);
+		}
+	}
 
     var table_of_contents = $('.table-of-contents');
 	for(var i = 0; i < table_of_contents.length; i++) {

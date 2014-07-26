@@ -78,6 +78,16 @@ class NgoWikiUtil:
                 except:
                     pass
 
+    def fixup_database_002(self):
+        fixupdb_sql_file = os.path.join(self.request.cfg.data_dir, "database", "fixup002.sql")
+        with open(fixupdb_sql_file, 'r') as f:
+            for line in f:
+                try:
+                    self.db.execute(line)
+                    self.db.commit()
+                except:
+                    pass
+
     def insert_tag(self, tag, type):
         uid = str(uuid.uuid1())
         self.db.execute('''
@@ -496,3 +506,20 @@ class NgoWikiUtil:
         for row in cursor:
             ret.append({"id": row[0], "tag": row[1], "type": row[2]})
         return ret
+
+    def insert_spec_image(self, uid, definition):
+        if len(uid.strip()) == 0 or self.select_spec_image_by_id(uid) == None:
+            uid = str(uuid.uuid1())
+        self.db.execute('''
+            INSERT OR IGNORE INTO SPEC_IMAGE(ID, DEFINITION) VALUES(?, ?) 
+            ''', (uid, definition))
+
+        return uid
+
+    def select_spec_image_by_id(self, uid):
+        cursor = self.db.cursor()
+        cursor.execute('''
+            SELECT ID, DEFINITION FROM SPEC_IMAGE WHERE ID = ?
+            ''', (uid,))
+        for row in cursor:
+            return {"id": row[0], "definition": row[1]}

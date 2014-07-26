@@ -563,9 +563,11 @@ def _do_upload(pagename, request):
 
     file_upload = request.files.get('file')
     if not file_upload:
-        # This might happen when trying to upload file names
-        # with non-ascii characters on Safari.
-        return _("No file content. Delete non ASCII characters from the file name and try again.")
+        file_upload = request.files.get('Filedata')
+        if not file_upload:
+            # This might happen when trying to upload file names
+            # with non-ascii characters on Safari.
+            return _("No file content. Delete non ASCII characters from the file name and try again.")
 
     try:
         overwrite = int(form.get('overwrite', '0'))
@@ -599,6 +601,11 @@ def _do_upload(pagename, request):
 
     if form.get('redirectUrl', '') != '':
         request.http_redirect(form.get('redirectUrl'))
+    elif form.get('return_attachment_url', '') != '':
+        request.write('FILEID:')
+        request.write(getAttachUrl(pagename, file_upload.filename, request, do='get'))
+        request.write('|FILENAME:')
+        request.write(file_upload.filename);
     else:
         # return attachment list
         upload_form(pagename, request, msg)

@@ -35,20 +35,16 @@ var oLink = dialog.Selection.GetSelection().MoveToAncestorNode( 'A' ) ;
 if ( oLink )
 	FCK.Selection.SelectNode( oLink ) ;
 
-window.onload = function()
-{
+$(window).ready(function() {
   // Load the selected element information (if any).
   LoadSelection();
 
   // Update UI
-  OnProtocolChange();
-
-  // Activate the "OK" button.
-  window.parent.SetOkButton( true ) ;
+  //OnProtocolChange();
 
   // select first text input element of dialog for usability
-  SelectField('txtUrl');
-}
+  //SelectField('txtUrl');
+});
 
 function LoadSelection()
 {
@@ -72,6 +68,18 @@ function LoadSelection()
     // Remove the protocol and get the remainig URL.
     sUrl = sUrl.replace(UriProtocol, '');
   }
+  
+  $.ajax({
+      url: FCKConfig['WikiBasePath'] + FCKConfig['WikiPage'] + "?action=imageDetail&name=" + sUrl, 
+	  dataType: 'json', 
+	  success: function(data){
+		  imgs = data;
+		  for(var i = 0; i < imgs.length; i++) {
+		      img = imgs[i];
+			  addImage(img, FCKConfig['WikiBasePath'] + FCKConfig['WikiPage'] + "?action=AttachFile&do=get&target=" + encodeURIComponent(img))
+		  }
+	  }
+  });
 
   GetE('txtUrl').value = decodeURIComponent(sUrl);
 
@@ -139,6 +147,24 @@ function getAttachUrl(sUrl)
 //#### The OK button was hit.
 function Ok()
 {
+  var sPage = FCKConfig['WikiPage'];
+  
+  var images = []
+  var imageElems = $(".ui-state-default img");
+  for(var i = 0; i < imageElems.length; i++) {
+      images.push(imageElems[i].getAttribute('_name'));
+  }
+  $.ajax({
+     type: "POST", 
+	 url: FCKConfig['WikiBasePath'] + sPage + "?action=createImage", 
+	 data: {"name": GetE('txtUrl').value, "layout": JSON.stringify({"images": images, "width": GetE('img_width').value, "height": GetE('img_height').value})}, 
+	 dataType: 'text', 
+	 async: false,
+	 success: function(data){
+	     GetE('txtUrl').value = data;
+	 }
+  });
+
   if ( GetE('txtUrl').value.length == 0 )
   {
      window.parent.SetSelectedTab( 'Info' ) ;
@@ -168,30 +194,12 @@ function Ok()
     }
   }
 
-  if (sProtocol=='attachment:' || sProtocol=='drawing:')
-  {
-    sTitle = sProtocol + encodeUrl(sSrc);
-    if (sProtocol=='drawing:')
-      sSrc = sSrc + '.png';
-    sSrc = getAttachUrl(encodeUrl(sSrc));
-  } else
-  {
-    sSrc = sProtocol + encodeUrl(sSrc);
-    
-    // Link image
-    if (GetE('chkLink').checked)
-    {
-      if (!oLink) 
-        oLink = oEditor.FCK.CreateLink(sSrc);
-      else
-        oLink.src = sSrc;
-    } else
-    {
-      if (oLink) FCK.ExecuteNamedCommand('Unlink');
-    }
-  }
+  sTitle = sProtocol + encodeUrl(sSrc);
+  sSrc = getAttachUrl(encodeUrl(sSrc));
+  
   oImage.src = sSrc;
   oImage.title = sTitle;
+  oImage.alt = sTitle.replace(sProtocol, '');
   oImage.width = GetE('img_width').value;
   oImage.height = GetE('img_height').value;
   if(GetE('image_align').value != 'none') {

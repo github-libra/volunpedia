@@ -139,6 +139,7 @@ class Theme(rightsidebar.Theme):
     def html_head(self, d):
         head = [rightsidebar.Theme.html_head(self, d)]
         head.append(u'\n<script type="text/javascript" src="%s/%s/js/jquery.js"></script>' % (self.cfg.url_prefix_static, self.name))
+        head.append(u'\n<script type="text/javascript" src="%s/%s/js/json2.js"></script>' % (self.cfg.url_prefix_static, self.name))
         head.append(u'\n<script type="text/javascript" src="%s/%s/js/ngowiki_v20140311.js"></script>' % (self.cfg.url_prefix_static, self.name))
         head.append(u'\n<script type="text/javascript">window.url_prefix_static="%s";</script>' % (self.cfg.url_prefix_static))
         return '\n'.join(head)

@@ -6,8 +6,11 @@
     @license: GNU GPL, see COPYING for details.
 """
 
+import tenjin, os, time
+from tenjin.helpers import *
 from MoinMoin import config, wikiutil
 from MoinMoin.action.AttachFile import _get_files
+from MoinMoin.action.AttachFile import getAttachUrl
 from MoinMoin.Page import Page
 import re
 
@@ -515,138 +518,14 @@ def image_dialog(request):
     attachments = _get_files(request, attachmentsPagename)
     attachments = filter(lambda attachment: attachment.endswith('.gif') or attachment.endswith('.png') or attachment.endswith('.jpg') or attachment.endswith('.jpeg') ,attachments)
     attachments.sort()
-    attachmentList = u'''
-        <select id="sctAttachments" size="10" style="width:100%%;" onchange="OnAttachmentListChange();">
-        %s
-        </select>
-''' % "\n".join([u'<option value="%s">%s</option>' % (wikiutil.escape(attachment, quote=True), wikiutil.escape(attachment, quote=True))
-                 for attachment in attachments])
 
-    request.write(u'''
-<!--
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2004 Frederico Caldeira Knabben
- *
- * Licensed under the terms of the GNU Lesser General Public License:
- *   http://www.opensource.org/licenses/lgpl-license.php
- *
- * For further information visit:
- *   http://www.fckeditor.net/
- *
- * File Authors:
- *   Frederico Caldeira Knabben (fredck@fckeditor.net)
- *   Florian Festi
--->
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
- <head>
-  <title>Link Properties</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="robots" content="noindex,nofollow" />
-  <script src="%(url_prefix_static)s/applets/FCKeditor/editor/dialog/common/fck_dialog_common.js" type="text/javascript"></script>
-  <script src="%(url_prefix_static)s/applets/moinFCKplugins/moinimage/fck_image.js" type="text/javascript"></script>
-  <script src="%(url_prefix_static)s/applets/moinFCKplugins/moinurllib.js" type="text/javascript"></script>
- </head>
- <body scroll="no" style="OVERFLOW: hidden">
-    <form id="DlgImageForm"  action=%(action)s method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="action" value="fckdialog">
-    <input type="hidden" name="dialog" value="image">
-    <input type="hidden" id="attachmentsPagename" name="attachmentsPagename" value="%(attachmentsPagename)s">
-    <table width="100%%" border="0">
-     <tr style="display:none">
-      <td nowrap="nowrap">
-       <span fckLang="DlgLnkProto">Protocol</span><br />
-       <select id="cmbLinkProtocol" onchange="OnProtocolChange();">
-        <option value="attachment:" selected="selected">attachment:</option>
-        <option value="http://">http://</option>
-        <option value="https://">https://</option>
-        <!-- crashes often: <option value="drawing:">drawing:</option> -->
-        <option value="" fckLang="DlgLnkProtoOther">&lt;other&gt;</option>
-       </select>
-      </td>
-      <td nowrap="nowrap">&nbsp;</td>
-      <td nowrap="nowrap" width="100%%">
-       <span fckLang="DlgLnkURL">URL or File Name (attachment:)</span><br />
-       <input style="WIDTH: 100%%" type="text" onkeyup="OnUrlChange();" onchange="OnUrlChange();" />
-      </td>
-     </tr>
-     <tr>
-      <td nowrap="nowrap" style="width:80px">
-       <span>图片名：</span>
-      </td>
-      <td nowrap="nowrap" colspan="2" style="width:100%%">
-        <input id="txtUrl" style="WIDTH: 100%%" type="text" onkeyup="OnUrlChange();" onchange="OnUrlChange();" />
-      </td>
-     </tr>
-     <tr>
-      <td nowrap="nowrap" style="width:80px">
-       <span>宽度：</span>
-      </td>
-      <td nowrap="nowrap" colspan="2" style="width:100%%">
-       <input id="img_width" type="text" style="width:100%%" value="200" />
-      </td>
-     </tr>
-     <tr>
-      <td nowrap="nowrap" style="width:80px">
-       <span>高度：</span>
-      </td>
-      <td nowrap="nowrap" colspan="2" style="width:100%%">
-       <input id="img_height" type="text" style="width:100%%" value="200" />
-      </td>
-     </tr>
-     <tr>
-      <td nowrap="nowrap" style="width:80px">
-       <span>对齐：</span>
-      </td>
-      <td nowrap="nowrap" colspan="2" style="width:100%%">
-       <select id="image_align" style="width:100%%">
-        <option value="none" selected="selected">无</option>
-        <option value="floatLeft">左侧漂浮</option>
-		<option value="floatRight">右侧漂浮</option>
-		<option value="center">居中</option>
-       </select>
-      </td>
-     </tr>
-	 <tr>
-       <td colspan="3">
-         <fieldset>
-           <legend>可用图片列表</legend>
-           <table cellSpacing="0" cellPadding="0" width="100%%" border="0">
-             <tr>
-               <td valign="bottom" style="width:100%%;padding-top:5px;padding-bottom:5px;" >
-                 <input id="btnListAttachments" type="submit" value="刷新图片列表">
-                 &nbsp;
-                    <input id="uploadImageFormFileSelector" type="file" size="50" name="file" style="width:200px;margin-right:10px;font-size:13px" onchange="this.form['action'].value='AttachFile';this.form.submit();">
-                    <input id="uploadImageFormSubmitButton"  type="submit" value="上载" style="font-size:11px;display:none;">
-                    <input style="display:none" type="text" value="" size="50" name="target">
-                    <input style="display:none" type="checkbox" value="1" name="overwrite">
-                    <input type="hidden" value="upload" name="do">
-                    <input type="hidden" value="%(ticket)s" name="ticket">
-                    <input type="hidden" value="%(redirectUrl)s" name="redirectUrl">
-               </td>
-             </tr>
-             <tr>
-               <td valign="top" style="padding-top:10px">
-                 <label for="sctAttachments">图片列表</label><br>
-                 %(attachmentList)s
-               </td>
-             </tr>
-           </table>
-         </fieldset>
-       </td>
-     </tr>
-     <tr>
-      <td colspan=2>
-       <div id="divChkLink">
-        <input id="chkLink" type="checkbox"> Link to
-       </div>
-      </td>
-	 </tr>
-    </table>
-   </form>
- </body>
-</html>
-''' % locals())
+    attachment_urls = {}
+    for attachment in attachments:
+        attachment_urls[attachment] = getAttachUrl(request.page.page_name, attachment, request, do='get')
+
+    engine = tenjin.Engine(path=[os.path.dirname(__file__) + '/views'])
+    html = engine.render('image_dialog.pyhtml', locals())
+    request.write(html)
 
 
 #############################################################################
