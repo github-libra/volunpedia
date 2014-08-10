@@ -28,8 +28,7 @@ class NGOWIKI_NEWPAGE:
 
         copyrightPage = Page(self.request, 'copyright')
         copyrightText = copyrightPage.getPageText()
-        copyrightStart = copyrightText.find(' =') + 2
-        copyrightText = copyrightText[copyrightStart:].strip()
+        copyrightText = copyrightText[:].strip()
 
         content = content.replace('{copyright}', copyrightText)
         return content

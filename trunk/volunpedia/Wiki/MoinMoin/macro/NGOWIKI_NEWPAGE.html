@@ -9,7 +9,6 @@
 			<option value="volunteer">学生志愿组织</option>
             <option value="site">志愿服务基地</option>
 			<option value="material">资料库</option>
-            <option value="design">公益漫画</option>
          </select>
    </tr>
    <tr>
@@ -31,7 +30,7 @@
    </tr>
    <tr>
       <td colspan="2" style="border-width:0px; width:25em;">
-	      <textarea  style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%; height: 15em;" readonly>{copyright}</textarea>
+	      <textarea  style="padding:10px; line-height:30px; font-size:120%; border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%; height: 15em;" readonly>{copyright}</textarea>
 	  </td>
    </tr>
    <tr>
@@ -86,8 +85,6 @@
 		    url = url + '志愿服务基地模板';
 		} else if(type == 'material') {
 		    url = url + '资料模板';
-        } else if(type == 'design') {
-            url = url + '公益漫画模板'
 		}
 		
 		window.location.href = url;
@@ -123,19 +120,13 @@
 			$("#organizationTR")[0].style.display = 'none';
 		} else if(t == 'enterprise') {
 		    $("#nameLabel")[0].innerHTML = '企业志愿组织名：';
-            $("#organizationTR")[0].style.display = 'none';
 		} else if(t == 'volunteer') {
 		    $("#nameLabel")[0].innerHTML = '学生志愿组织名：';
-            $("#organizationTR")[0].style.display = 'none';
 		} else if(t == 'site') {
 		    $("#nameLabel")[0].innerHTML = '志愿服务基地名：';
-            $("#organizationTR")[0].style.display = 'none';
 		} else if(t == 'material') {
 		    $("#nameLabel")[0].innerHTML = '资料名：';
 			$("#organizationTR")[0].style.display = 'none';
-        } else if(t == 'design') {
-            $("#nameLabel")[0].innerHTML = '漫画名：';
-            $("#organizationTR")[0].style.display = 'none';
 		}
 	}
 	
