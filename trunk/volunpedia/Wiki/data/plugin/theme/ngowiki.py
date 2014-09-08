@@ -108,24 +108,30 @@ class Theme(rightsidebar.Theme):
         item = u'<li class="%s">%s</li>'
         current = d['page_name']
 
-        pagenames = [u'志愿活动', u'志愿组织', u'公益机构', u'企业志愿组织', u'学生志愿组织', u'志愿服务基地', u'志愿设计', u'资料库']
+        pagenames = [u'志愿产品', u'服务产品', u'视听产品', u'实体产品', u'志愿组织', u'公益机构', u'企业志愿组织', u'学生志愿组织', u'志愿服务基地', u'应用工具']
         for pagename in pagenames:
-            # Split text without localization, user knows what he wants
-            if pagename != u'志愿组织':
+            pagegroup = None
+            
+            if pagename == u'志愿产品':
+                pagegroup = 'volunpedia_product_pages'
+            elif pagename == u'志愿组织':
+                pagegroup = 'volunpedia_organization_pages'
+                
+            if pagename != u'志愿产品' and pagename != u'志愿组织':
                 page = Page(request, pagename)
                 title = page.split_title()
                 title = self.shortenPagename(title)
                 link = page.link_to(request, title)
                 cls = 'userlink'
                 items.append(item % (cls, link))
-                if pagename == u'学生志愿组织':
+                if pagename == u'实体产品' or pagename == u'学生志愿组织':
                     items.append(u'</ul></li>')
                 found[pagename] = 1
             else:
                 cls = 'userlink'
-                link = u'<a href="javascript:;" onclick="var t = document.getElementById(\'organizationTypeChildMenu\'); if(t.style.display == \'none\') {t.style.display = \'\';} else {t.style.display = \'none\';}">' + pagename + u'</a>'
+                link = u'<a href="javascript:;" onclick="var t = document.getElementById(\'' + pagegroup + u'_menu' + u'\'); if(t.style.display == \'none\') {t.style.display = \'\';} else {t.style.display = \'none\';}">' + pagename + u'</a>'
                 items.append(item % (cls, link))
-                items.append(u'<li id="organizationTypeChildMenu" class="userlink" style="display:none"><ul style="padding-left:2.5em">')
+                items.append(u'<li id="' + pagegroup + u'_menu' + u'" class="userlink"><ul style="padding-left:2.5em">')
 
         # Assemble html
         items = u''.join(items)
@@ -198,55 +204,6 @@ class Theme(rightsidebar.Theme):
             return u'\n'.join(html)
         return ''
 
-    def recommendedpanel(self, d):
-        """ Create page panel """
-        _ = self.request.getText
-        html = [
-            u'<div class="sidepanel">',
-            u'<h1>热门活动</h1>',
-            self.recommendedbar(d),
-            u'</div>',
-            ]
-        return u'\n'.join(html)
-
-    def recommendedbar(self, d):
-        request = self.request
-        ngowikiutil = NgoWikiUtil(request)
-
-        found = {} # pages we found. prevent duplicates
-        items = [] # 
-        item = u'<li class="%s"><a href="%s">%s</a></li>'
-
-        pages = []
-        if Theme.recommendbarItemsLastUpdated != None and long(time.time()) - Theme.recommendbarItemsLastUpdated <= 3600L:
-            pages = Theme.recommendbarItems
-        else:
-            try:
-                ngowikiutil.open_database()
-                pages = ngowikiutil.select_pages_by_tag([u'公益活动类'], 'popularity', 'DESC', 0, 5)
-                Theme.recommendbarItems = pages
-                Theme.recommendbarItemsLastUpdated = long(time.time())
-            except:
-                pass
-            finally:
-                ngowikiutil.close_database(True)
-        for pageinfo in pages:
-            pagename = pageinfo["path"]
-            pagetitle = pageinfo["title"]
-            page = Page(request, pagename)
-            pageurl = page.url(request)
-            cls = 'userlink'
-            items.append(item % (cls, pageurl, pagetitle))
-
-        # Assemble html
-        items = u''.join(items)
-        html = u'''
-<ul>
-%s
-</ul>
-''' % items
-        return html
-
     def header(self, d):
         """
         Assemble page header
@@ -280,11 +237,6 @@ class Theme(rightsidebar.Theme):
             u'<div id="sidebar">',
             self.wikipanel(d),
             self.pagepanel(d),
-            u'</div>',
-
-            # Right sidebar
-            u'<div id="sidebar" class="complementary">',
-            self.recommendedpanel(d),
             u'</div>',
 
             # Page
@@ -329,14 +281,9 @@ class Theme(rightsidebar.Theme):
             self.pagepanel(d),
             u'</div>',
 
-            # Right sidebar
-            u'<div id="sidebar" class="complementary">',
-            self.recommendedpanel(d),
-            u'</div>',
-
             # Page
             self.startPage(),
-			
+            
             self.msg(d),
             ]
         return u'\n'.join(html)
@@ -357,7 +304,7 @@ class Theme(rightsidebar.Theme):
             'search_full_label': _('Text'),
             'search_title_label': _('Titles'),
             'url': self.request.href(d['page'].page_name),
-			'search_icon': self.img_url('search-ltr.png')
+            'search_icon': self.img_url('search-ltr.png')
             }
         d.update(updates)
 
