@@ -3,24 +3,26 @@
       <td style="border-width:0px">创建：</td>
 	  <td style="border-width:0px; width:25em;">
 	     <select id="type" name="type" style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%">
-            <option value="activity">志愿活动</option>
+            <option value="service">服务产品</option>
+			<option value="multimedia">视听产品</option>
+			<option value="product">实体产品</option>
             <option value="organization">公益机构</option>
             <option value="enterprise">企业志愿组织</option>
 			<option value="volunteer">学生志愿组织</option>
             <option value="site">志愿服务基地</option>
-			<option value="material">资料库</option>
+			<option value="tool">应用工具</option>
          </select>
    </tr>
    <tr>
-      <td id="nameLabel" style="border-width:0px">志愿活动名：</td>
+      <td id="nameLabel" style="border-width:0px">服务产品名：</td>
 	  <td style="border-width:0px; width:25em;">
 	     <input type="text" id="name" name="name" style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%">
 	  </td>
    </tr>
-   <tr id="organizationTR">
-      <td style="border-width:0px">所属公益机构：</td>
+   <tr id="belongToTR">
+      <td id="belongToLabel" style="border-width:0px">所属志愿组织：</td>
 	  <td style="border-width:0px; width:25em;">
-	     <input type="text" id="organization" name="organization" style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%">
+	     <input type="text" id="belongTo" name="belongTo" style="border-collapse: collapse; border-spacing: 2px; border-color: #BBB; border-width: 1px; width:100%">
 	  </td>
    </tr>
    <tr>
@@ -59,8 +61,8 @@
 	    var url = "";
 		
 		var type = $("#type")[0].value;
-		if(type != 'organization') {
-		    var belong = $("#organization")[0].value;
+		if(type != 'organization' && type != 'enterprise' && type != 'volunteer') {
+		    var belong = $("#belongTo")[0].value;
 			belong = jQuery.trim(belong.replace(/\//g, ' '));
 			if(belong.length > 0) {
 			    url = url + '/' + encodeURIComponent(belong);
@@ -73,8 +75,12 @@
 		}
 		
 		url = url + '/' + encodeURIComponent(pagename) + '?action=edit&editor=gui&template=';
-		if(type == 'activity') {
-		    url = url + '志愿活动模板';
+		if(type == 'service') {
+		    url = url + '服务产品模板';
+		} else if(type == 'multimedia') {
+		    url = url + '视听产品模板';
+		} else if(type == 'product') {
+		    url = url + '实体产品模板';
 		} else if(type == 'organization') {
 		    url = url + '公益机构模板';
 		} else if(type == 'enterprise') {
@@ -83,8 +89,8 @@
 		    url = url + '学生志愿组织模板';
 		} else if(type == 'site') {
 		    url = url + '志愿服务基地模板';
-		} else if(type == 'material') {
-		    url = url + '资料模板';
+		} else if(type == 'tool') {
+		    url = url + '应用工具模板';
 		}
 		
 		window.location.href = url;
@@ -100,7 +106,22 @@
 	
 	var organization = getQueryParameter('organization');
 	if(!!organization) {
-	    $("#organization")[0].value = decodeURIComponent(organization);
+	    $("#belongTo")[0].value = decodeURIComponent(organization);
+	}
+	
+	var enterprise = getQueryParameter('enterprise');
+	if(!!enterprise) {
+	    $("#belongTo")[0].value = decodeURIComponent(enterprise);
+	}
+	
+	var volunteer = getQueryParameter('volunteer');
+	if(!!volunteer) {
+	    $("#belongTo")[0].value = decodeURIComponent(volunteer);
+	}
+	
+	var belongTo = getQueryParameter('belongTo');
+	if(!!belongTo) {
+	    $("#belongTo")[0].value = decodeURIComponent(belongTo);
 	}
 	
 	var pagetype = getQueryParameter('pagetype');
@@ -110,23 +131,29 @@
 	}
 	
 	function onNewPageTypeChanged() {
-	    $("#organizationTR")[0].style.display = '';
+	    $("#belongToTR")[0].style.display = '';
 		
 	    var t = $("#type")[0].value;
-		if(t == 'activity') {
-		    $("#nameLabel")[0].innerHTML = '志愿活动名：';
+		if(t == 'service') {
+		    $("#nameLabel")[0].innerHTML = '服务产品名：';
+		} else if(t == 'multimedia') {
+		    $("#nameLabel")[0].innerHTML = '视听产品名：';
+		} else if(t == 'product') {
+		    $("#nameLabel")[0].innerHTML = '实体产品名：';
 		} else if(t == 'organization') {
 		    $("#nameLabel")[0].innerHTML = '公益机构名：';
-			$("#organizationTR")[0].style.display = 'none';
+			$("#belongToTR")[0].style.display = 'none';
 		} else if(t == 'enterprise') {
 		    $("#nameLabel")[0].innerHTML = '企业志愿组织名：';
+			$("#belongToTR")[0].style.display = 'none';
 		} else if(t == 'volunteer') {
 		    $("#nameLabel")[0].innerHTML = '学生志愿组织名：';
+			$("#belongToTR")[0].style.display = 'none';
 		} else if(t == 'site') {
 		    $("#nameLabel")[0].innerHTML = '志愿服务基地名：';
-		} else if(t == 'material') {
-		    $("#nameLabel")[0].innerHTML = '资料名：';
-			$("#organizationTR")[0].style.display = 'none';
+		} else if(t == 'tool') {
+		    $("#nameLabel")[0].innerHTML = '应用工具名：';
+			$("#belongToTR")[0].style.display = 'none';
 		}
 	}
 	
