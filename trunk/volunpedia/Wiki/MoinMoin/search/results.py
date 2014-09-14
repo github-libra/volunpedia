@@ -485,7 +485,7 @@ class SearchResults(object):
                         link = page.url(request)
                         title = result["title"]
                         lastmodified = page.mtime_printable(request)
-                        summary = result["summary"]
+                        summary = result["summary"].replace(u"'''", "").replace(u"【请在此插入图片】", "").replace(u"【请在此插入图片，最多可插入9张】", "")
 
                         tags = (", ".join(
                                   map(lambda x: '<a href=\'javascript:add_filter_by_tag(' + json.dumps(x["tag"]) + ')\' >' + x["tag"] + '</a>', 
