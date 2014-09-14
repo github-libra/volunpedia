@@ -464,6 +464,52 @@ class NgoWikiUtil:
         for row in cursor:
             ret.append({"id": row[0], "path": row[1], "title": row[2], "logo": row[3], "summary": row[4], "lastmodified": row[5], "datecreated": row[6], "hitcount": row[7], "commentcount": row[8], "likecount": row[9], "superrecommend": row[10]})
         return ret
+
+    def select_pages_with_one_of_tags(self, tags, sortby, order, offset, length):
+        p_orderby_clause = ""
+        if sortby == "hitcount":
+            p_orderby_clause = "PAGES.HITCOUNT " + order
+        elif sortby == "commentcount":
+            p_orderby_clause = "PAGES.COMMENTCOUNT " + order
+        elif sortby == "likecount":
+            p_orderby_clause = "PAGES.LIKECOUNT " + order
+        elif sortby == "title":
+            p_orderby_clause = "PAGES.TITLE " + order
+        elif sortby == "popularity":
+            p_orderby_clause = "PAGES.COMMENTCOUNT + PAGES.LIKECOUNT DESC, PAGES.HITCOUNT DESC"
+        elif sortby == "featured":
+            p_orderby_clause = "(2.0 - 2.0/(PAGES.commentcount + 2.0) - 1.0/(PAGES.likecount + 1.0) + (random() % 16 + 25.0)/5.3) DESC"
+        else:
+            p_orderby_clause = "PAGES.LASTMODIFIED " + order
+
+        p_featured_where_clause = ""
+        if sortby == "featured":
+            p_featured_where_clause = " AND PAGES.SUPERRECOMMEND IS NOT NULL "
+
+        tagfilter_sql_part = '''
+           SELECT PAGE_TAGS.PAGE_ID
+           FROM PAGE_TAGS PAGE_TAGS INNER JOIN TAGS TAGS ON PAGE_TAGS.TAG_ID = TAGS.ID
+           WHERE TAGS.TAG = ?
+           '''
+        tagfilter_sql_parts = []
+        for tag in tags:
+            tagfilter_sql_parts.append(tagfilter_sql_part)
+
+        sql = '''
+           SELECT PAGES.ID, PAGES.PATH, PAGES.TITLE, PAGES.LOGO, PAGES.SUMMARY, PAGES.LASTMODIFIED, PAGES.DATECREATED, PAGES.HITCOUNT, PAGES.COMMENTCOUNT, PAGES.LIKECOUNT, PAGES.SUPERRECOMMEND
+           FROM PAGES PAGES 
+           WHERE PAGES.ID IN (%s) %s
+           ORDER BY %s
+           LIMIT %s, %s
+           ''' % (" UNION ".join(tagfilter_sql_parts), p_featured_where_clause, p_orderby_clause, str(offset), str(length))
+
+        cursor = self.db.cursor()
+        cursor.execute(sql, tuple(tags))
+
+        ret = []
+        for row in cursor:
+            ret.append({"id": row[0], "path": row[1], "title": row[2], "logo": row[3], "summary": row[4], "lastmodified": row[5], "datecreated": row[6], "hitcount": row[7], "commentcount": row[8], "likecount": row[9], "superrecommend": row[10]})
+        return ret
     
     def count_pages_by_tag(self, tags):
         tagfilter_sql_part = '''
