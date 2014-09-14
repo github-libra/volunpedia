@@ -25,7 +25,11 @@ class NgoWikiUtil:
         if match != None:
             title = match.group(1)
             title_end_idx = match.end(0)
-            summary_end_idx = text.find('== ')
+            summary_end_idx1 = text.find('== ')
+            summary_end_idx2 = text.find('{{')
+            summary_end_idx = summary_end_idx1
+            if summary_end_idx2 != -1 and summary_end_idx2 < summary_end_idx1:
+                summary_end_idx = summary_end_idx2
             summary = text[title_end_idx:summary_end_idx]
             summary = summary.strip()
 
