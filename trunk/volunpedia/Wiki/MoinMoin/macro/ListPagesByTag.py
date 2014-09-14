@@ -84,7 +84,7 @@ class ListPagesByTag:
                 link = page.url(self.request)
                 title = result["title"]
                 lastmodified = page.mtime_printable(self.request)
-                summary = result["summary"]
+                summary = result["summary"].replace("'''", "").replace(u"【请在此插入图片】", "").replace(u"【请在此插入图片，最多可插入9张】", "")
 
                 tags = (", ".join(
                           map(lambda x: '<a href=\'javascript:add_filter_by_tag(' + json.dumps(x["tag"]) + ')\' >' + x["tag"] + '</a>', 

@@ -35,6 +35,7 @@ class FrontpageMacro:
                 FrontpageMacro.totalcount_enterprises = ngowikiutil.count_pages_by_tag([u'企业志愿组织类'])
                 FrontpageMacro.featured_activities = ngowikiutil.select_pages_with_one_of_tags([u'服务产品类', u'视听产品类', u'实体产品类'], 'featured', 'DESC', 0, 20)
                 for record in FrontpageMacro.featured_activities[0:2]:
+                    record["summary"] = record["summary"].replace("'''", "")
                     pagename = record["path"]
                     page = Page(self.request, pagename)
                     record["link"] = page.url(self.request)
