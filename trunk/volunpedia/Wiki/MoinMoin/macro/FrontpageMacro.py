@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 
-import tenjin, os, time
+import tenjin, os, time, re
 from tenjin.helpers import *
 from MoinMoin.Page import Page
 from MoinMoin.ngowikiutil import NgoWikiUtil
@@ -41,7 +41,16 @@ class FrontpageMacro:
                     if len(record["logo"]) > 0 and exists(self.request, record["path"], record["logo"]):
                         record["logo_link"] = getAttachUrl(record["path"], record["logo"], self.request)
                     else:
-                        record["logo_link"] = self.request.cfg.url_prefix_static + "/ngowiki/img/no-logo.png"
+                        findLogo = False
+                        text = page.getPageText()
+                        match = re.search('\\{\\{attachment:([^\\|]+)\\|\\|.*}}', text)
+                        if match != None:
+                            logo = match.group(1)
+                            if exists(self.request, record["path"], logo):
+                                record["logo_link"] = getAttachUrl(record["path"], logo, self.request)
+                                findLogo = True
+                        if not findLogo:
+                            record["logo_link"] = self.request.cfg.url_prefix_static + "/ngowiki/img/no-logo.png"
                 FrontpageMacro.featured_ngos = ngowikiutil.select_pages_by_tag([u'公益机构类'], 'featured', 'DESC', 0, 2)
                 for record in FrontpageMacro.featured_ngos:
                     pagename = record["path"]
