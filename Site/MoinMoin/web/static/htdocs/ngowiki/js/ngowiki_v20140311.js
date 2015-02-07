@@ -54,6 +54,21 @@ $( window ).ready(function() {
 	});
 	adjust_img_paddings();
 	
+	$(window).scroll(function(){
+		var vtop=$(document).scrollTop();
+		if (vtop > 120) {
+			$('div.table-of-contents-float-heading').css('position', 'fixed');
+			$('div.table-of-contents-float-heading').css('top', '0px');
+			$('div.table-of-contents').css('position', 'fixed');
+			$('div.table-of-contents').css('top', '0px');
+		} else {
+			$('div.table-of-contents-float-heading').css('position', 'absolute');
+			$('div.table-of-contents-float-heading').css('top', '120px');
+			$('div.table-of-contents').css('position', 'absolute');
+			$('div.table-of-contents').css('top', '120px');
+		}
+	});
+
 	if(typeof FCKeditor == 'undefined') {
 		var attachment_images = $('.attachment');
 		for(var i = 0; i < attachment_images.length; i++) {
