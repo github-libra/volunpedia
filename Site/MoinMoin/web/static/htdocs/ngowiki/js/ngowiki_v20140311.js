@@ -69,6 +69,10 @@ $( window ).ready(function() {
 		}
 	});
 
+	if (location.search.indexOf('action=edit') != -1) {
+		$(window).bind('beforeunload', function(){return '您输入的内容尚未保存，确定离开此页面吗？';});
+	}
+
 	if(typeof FCKeditor == 'undefined') {
 		var attachment_images = $('.attachment');
 		for(var i = 0; i < attachment_images.length; i++) {
