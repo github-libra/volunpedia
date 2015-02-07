@@ -124,12 +124,16 @@ $( window ).ready(function() {
 			node.style.top = "-30px";
 			node.style.color = "gray";
 			var ideaStatusLabel = ['活动已实现', '活动筹备中', '新创意'];
-			node.innerHTML = '关键字:' + '<span style="padding-right:5px;">&nbsp;</span>' + [].concat(window.__page_meta.tags).concat(window.__page_meta.locations).join(", ") + (window.__page_meta.status !== "" ? '&nbsp; | &nbsp; 状态:<span style="padding-right:5px;">&nbsp;</span>' + ideaStatusLabel[window.__page_meta.status] : '');
+			node.innerHTML = '关键字:' + '<span style="padding-right:5px;">&nbsp;</span><a class="key-world" href=\"javascript:;\">' + [].concat(window.__page_meta.tags).concat(window.__page_meta.locations).join("</a>, <a class=\"key-world\" href=\"javascript:;\">") + "</a>" + (window.__page_meta.status !== "" ? '&nbsp; | &nbsp; 状态:<span style="padding-right:5px;">&nbsp;</span>' + ideaStatusLabel[window.__page_meta.status] : '');
 			if(h1.parentNode.lastChild == h1) {
 			    h1.parentNode.appendChild(node);
 			} else {
 			    h1.parentNode.insertBefore(node, h1.nextSibling);
 			}
+
+			$('a.key-world').click(function() {
+				location.href = '/' + window.__page_meta.tags[0].substring(0, window.__page_meta.tags[0].length - 1) + '?filterByTags=' + window.__page_meta.tags[0] + ',' + $(this).text() + '&from=0';
+			});
 		}
 	}
 	
