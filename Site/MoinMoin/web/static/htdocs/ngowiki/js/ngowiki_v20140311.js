@@ -519,6 +519,7 @@ function displayRelatedTagsPanel(data) {
 			}
 			if(i == 9) {
 				var morelink = document.createElement("a");
+				morelink.id = "relatedTagsPanel_morelink";
 				morelink.setAttribute("href", "javascript:;");
 				morelink.innerHTML = "【更多】";
 				morelink.style.borderBottom = 'none';
@@ -529,10 +530,23 @@ function displayRelatedTagsPanel(data) {
 			    html.appendChild(morelink);
 			    html.appendChild(moreSpan);
 			}
-			if(i > 0 && ((i % 10) == 9)) {
+			if(i > 0 && ((i % 10) == 9) && i != data.length - 1) {
 			    moreSpan.appendChild(document.createElement("br"));
 			}
 		}
+		
+		{
+			var lesslink = document.createElement("a");
+			lesslink.setAttribute("href", "javascript:;");
+			lesslink.innerHTML = "【收起】";
+			lesslink.style.borderBottom = 'none';
+			$(lesslink).on("click", function(){
+				document.getElementById('relatedTagsPanel_moreitems').style.display = 'none';
+				document.getElementById('relatedTagsPanel_morelink').style.display = '';
+			});
+			moreSpan.appendChild(lesslink);
+		}
+		
 		document.getElementById('relatedTagsPanel').innerHTML = '';
 		document.getElementById('relatedTagsPanel').appendChild(html);
 		document.getElementById('relatedTagsPanel').style.display = '';
