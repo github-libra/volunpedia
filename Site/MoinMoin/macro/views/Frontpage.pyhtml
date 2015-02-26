@@ -4,7 +4,7 @@
 		<img src="${slogan_url}">
 	</div>
 	<div class="stats_block">
-		<h1>一起趣志愿</h1>
+		<h1>一起<i>趣</i>志愿</h1>
 		<p>好创意，可复制，可修改，不可被埋没！</p>
 		<a href="/join_us" class="join_us_btn">开始参与</a>
 		<div class="stats">
