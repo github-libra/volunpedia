@@ -644,15 +644,15 @@ table.presentation td.newscolumn .sectioncontent {
 	font-size: 1.05em;
 }
 #content .sectioncontent a.create_content_btn {
-    border: 1px solid #aaa;
-    background-color: #0F6FB9;
-    padding: 13px 100px;
+    border: 1px solid #0F6FBB;
+    background-color: #0F6FBB;
+    padding: 5px 82px;
     border-radius: 4px;
     color: white;
     font-weight: bold;
     font-size: 1.6em;
     cursor: pointer;
-    margin-left: 1.2em;
+    margin-left: 1.6em;
 }
 table.presentation td.newscolumn .sectioncontent td {
 	vertical-align: top;
