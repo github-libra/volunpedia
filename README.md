@@ -52,4 +52,4 @@
 然后保存
 
 10. 对windows部署还有一步额外操作，将/cgi_patch/fcgi_base.py拷贝替换<moin_base>/moin-1.9.7/MoinMoin/support/flup/server中原来的fcgi_base.py文件
-```
+```\n
